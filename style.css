@@ -1,0 +1,40 @@
+html {
+	font-size: 62.5%;
+}
+
+#can {
+	border: 1px solid black;
+	background-color: black;
+	width: 100%;
+}
+
+.keyboard.row {
+	width: 80%;
+	margin: 2rem auto;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
+.keyboard.row .key {
+	margin: 1.2rem 0;
+	width: 7.2rem;
+}
+
+.keyboarButton {
+	text-align: center;
+}
+
+.hangman-container {
+	display: flex;
+	justify-content: center;
+}
+
+.hangman-letter {
+	color: white;
+	font-size: 5rem;
+}
+
+.hangman-letter:not(:last-child) {
+	margin-right: 0.5rem;
+}
