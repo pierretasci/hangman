@@ -1,13 +1,9 @@
-const MAX_GUESSES = 6;
+const MAX_GUESSES = 8;
 const ABC_KEYS = [
-  ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'], 
-  ['k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'],
-  ['t', 'u', 'v', 'w', 'x', 'y', 'z']
+  ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z']
 ];
 const QWERTY_KEYS = [
-  ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
-  ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
-  ['z', 'x', 'c', 'v', 'b', 'n', 'm']
+  ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'z', 'x', 'c', 'v', 'b', 'n', 'm']
 ];
 const getRandomWord = function() {
   return fetch('http://www.setgetgo.com/randomword/get.php', {
@@ -33,6 +29,13 @@ getRandomWord().then((random_word) => {
       keyboard_keys: ABC_KEYS,
     },
     computed: {
+      hangmanClass: function() {
+        const classes = {};
+        for (let i = 0; i < MAX_GUESSES; ++i) {
+          classes['sprite' + i] = MAX_GUESSES - this.guesses_left == i;
+        }
+        return classes;
+      },
       hangmanWord: function() {
         return this.word.map((letter) => {
           if (this.guessed_letters.hasOwnProperty(letter)) {
@@ -49,6 +52,9 @@ getRandomWord().then((random_word) => {
         const tmp = {};
         tmp[letter] = 1;
         this.guessed_letters = Object.assign({}, this.guessed_letters, tmp);
+        if (this.word.indexOf(letter) < 0) {
+          --this.guesses_left;
+        }
       },
 
       switchAbc: function() {

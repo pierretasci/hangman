@@ -68,8 +68,11 @@
 			<div class="col-sm-1 col-md-2 col-lg-3 col-xl-3"></div> <!-- Offset -->
 			<div class="col-xs-12 col-sm-10 col-md-8 col-lg-6 col-xl-6">
 				<div class="hangman-container">
-					<div class="hangman-letter" v-for="letter in hangmanWord">
-						{{letter}}
+					<div class="hangman" v-bind:class="hangmanClass"></div>
+					<div class="hangman-letter-container">
+						<div class="hangman-letter" v-for="letter in hangmanWord">
+							{{letter}}
+						</div>
 					</div>
 				</div>
 			</div>
@@ -107,8 +110,8 @@
 		<!-- Keyboard -->
 		<div id="keyboard" class="row">
 			<div class="col-xs-1 col-sm-2 col-lg-1 col-xl-1"></div><!-- Offset -->
-			<!-- Container of all the keyboard rows -->
 			<div class="keyboard col-xs-10 col-sm-8 col-md-12 col-lg-10 col-xl-10">
+				<!-- Container of all the keyboard rows -->
 				<div class="keyboard row" v-for="row in keyboard_keys">	
 					<div class="key" v-for="key in row">
 						<button 
