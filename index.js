@@ -1,6 +1,14 @@
 const MAX_GUESSES = 6;
-const ABC_KEYS = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
-const QWERTY_KEYS = ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'z', 'x', 'c', 'v', 'b', 'n', 'm'];
+const ABC_KEYS = [
+  ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'], 
+  ['k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's'],
+  ['t', 'u', 'v', 'w', 'x', 'y', 'z']
+];
+const QWERTY_KEYS = [
+  ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
+  ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
+  ['z', 'x', 'c', 'v', 'b', 'n', 'm']
+];
 const getRandomWord = function() {
   return fetch('http://www.setgetgo.com/randomword/get.php', {
     cors: 'no-cors'
@@ -32,6 +40,23 @@ getRandomWord().then((random_word) => {
           }
           return '_';
         });
+      }
+    },
+    methods: {
+      press: function(e) {
+        e.preventDefault();
+        const letter = e.target.dataset.letter;
+        const tmp = {};
+        tmp[letter] = 1;
+        this.guessed_letters = Object.assign({}, this.guessed_letters, tmp);
+      },
+
+      switchAbc: function() {
+        this.keyboard_keys = ABC_KEYS;
+      },
+
+      switchQwerty: function() {
+        this.keyboard_keys = QWERTY_KEYS;
       }
     }
   });

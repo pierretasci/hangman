@@ -109,9 +109,14 @@
 			<div class="col-xs-1 col-sm-2 col-lg-1 col-xl-1"></div><!-- Offset -->
 			<!-- Container of all the keyboard rows -->
 			<div class="keyboard col-xs-10 col-sm-8 col-md-12 col-lg-10 col-xl-10">
-				<div class="keyboard row">	
-					<div class="key" v-for="key in keyboard_keys">
-						<button class="btn btn-default LetterBtn">
+				<div class="keyboard row" v-for="row in keyboard_keys">	
+					<div class="key" v-for="key in row">
+						<button 
+						  class="btn btn-default LetterBtn" 
+						  v-on:click="press"
+						  v-bind:data-letter="key.toUpperCase()"
+						  v-bind:disabled="guessed_letters[key.toUpperCase()]"
+						  v-bind:class="{ 'btn-success': guessed_letters[key.toUpperCase()] && word.indexOf(key.toUpperCase()) >= 0, 'btn-primary': guessed_letters[key.toUpperCase()] && word.indexOf(key.toUpperCase()) < 0 }">
 							{{key.toUpperCase()}}
 						</button>
 					</div>
@@ -119,8 +124,8 @@
 
 				<!-- This last keyboardRow contains OTHER buttons -->
 				<div class="row keyboard">
-					<button class="btn btn-default">QWERTY</button>
-					<button class="btn btn-default">ABCDEF</button>
+					<button class="btn btn-default" v-on:click="switchQwerty">QWERTY</button>
+					<button class="btn btn-default" v-on:click="switchAbc">ABCDEF</button>
 					<button class="btn btn-danger" data-modal="#newGameModal">
 						Give Up
 					</button>
