@@ -7,7 +7,7 @@ const QWERTY_KEYS = [
 ];
 const getRandomWord = function() {
   const protocol = window.location.protocol === 'https:' ? 'https:' : 'http:';
-  return fetch(protocol + '//www.setgetgo.com/randomword/get.phps', {
+  return fetch(protocol + '//www.setgetgo.com/randomword/get.php', {
     cors: 'no-cors'
   }).then((res) => {
     return res.text();
