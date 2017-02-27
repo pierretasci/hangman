@@ -108,7 +108,7 @@
 		<!-- End Game Information -->
 		
 		<!-- Keyboard -->
-		<div id="keyboard" class="row">
+		<div id="keyboard" class="row" v-bind:class="{ hide: allLettersFound }">
 			<div class="col-xs-1 col-sm-2 col-lg-1 col-xl-1"></div><!-- Offset -->
 			<div class="keyboard col-xs-10 col-sm-8 col-md-12 col-lg-10 col-xl-10">
 				<!-- Container of all the keyboard rows -->
@@ -136,10 +136,12 @@
 			</div>
 		</div> <!-- End Keyboard-->
 		<!-- Victory Message -->
-		<div id="victory" class="row hide">
+		<div id="victory" class="row" v-bind:class="{ hide: !allLettersFound }">
 			<div class="alert alert--success type--center">
 				<h2>Congratulations! You Win!</h2>
-				<button class="btn btn-default startNewGame">Start New Game</button>
+				<button class="btn btn-default startNewGame" v-on:click="startNewGame">
+					Start New Game
+				</button>
 			</div>
 		</div>
 		<!-- Defeat Message -->

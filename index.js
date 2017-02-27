@@ -5,37 +5,27 @@ const ABC_KEYS = [
 const QWERTY_KEYS = [
   ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'z', 'x', 'c', 'v', 'b', 'n', 'm']
 ];
+const STATIC_WORDS = [];
 const getRandomWord = function() {
   const protocol = window.location.protocol === 'https:' ? 'https:' : 'http:';
   return new Promise((resolve, reject) => {
     if (protocol === 'http:') {
       return resolve(fetch(protocol + '//www.setgetgo.com/randomword/get.php', {
         cors: 'no-cors'
-      }));
+      }).then((res) => res.text()));
+    } else if (STATIC_WORDS.length > 0) {
+      return resolve(STATIC_WORDS[Math.round(Math.random() * STATIC_WORDS.length) - 1]);
     } else {
-      reject(new Error('Cannot fetch words api over https. Violates security policy'));
+      return resolve(fetch('words.json')
+        .then((res) => res.json())
+        .then((raw) => {
+          console.log(raw);
+          STATIC_WORDS.push(...raw.words);
+          return STATIC_WORDS[Math.round(Math.random() * STATIC_WORDS.length) - 1];
+        }));
     }
-  }).then((res) => {
-    return res.text();
   }).then((word) => {
     return word.toUpperCase().split('');
-  }).catch((err) => {
-    console.error(err);
-    console.error('Could not fetch from remote. Fetching local.');
-    return fetch('words.json');
-  }).then((res) => {
-    // If we got a response, that means it loaded correctly.
-    return res.json();
-  }).then((raw) => {
-    console.log(raw);
-    const STATIC_WORDS = raw.words;
-    if (Array.isArray(STATIC_WORDS) && STATIC_WORDS.length > 0) {
-      return STATIC_WORDS[Math.round(Math.random() * STATIC_WORDS.length) - 1]
-        .toUpperCase()
-        .split('');
-    } else {
-      throw new Error("Could not load static words.");
-    }
   });
 }
 
@@ -54,6 +44,16 @@ getRandomWord().then((random_word) => {
       keyboard_keys: ABC_KEYS,
     },
     computed: {
+      allLettersFound: function() {
+        for (let i = 0; i < this.word.length; ++i) {
+          if (!this.guessed_letters.hasOwnProperty(this.word[i])) {
+            // Missing letter. Return false;
+            return false;
+          }
+        }
+        this.wins++;
+        return true;
+      },
       hangmanClass: function() {
         const classes = {};
         for (let i = 0; i < MAX_GUESSES; ++i) {
@@ -80,6 +80,14 @@ getRandomWord().then((random_word) => {
         if (this.word.indexOf(letter) < 0) {
           --this.guesses_left;
         }
+      },
+
+      startNewGame: function() {
+        getRandomWord().then((new_word) => {
+          this.guessed_letters = {};
+          this.guesses_left = MAX_GUESSES;
+          this.word = new_word;
+        });
       },
 
       switchAbc: function() {
