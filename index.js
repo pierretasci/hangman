@@ -6,7 +6,8 @@ const QWERTY_KEYS = [
   ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'z', 'x', 'c', 'v', 'b', 'n', 'm']
 ];
 const getRandomWord = function() {
-  return fetch('http://www.setgetgo.com/randomword/get.php', {
+  const protocol = window.location.protocol === 'https:' ? 'https:' : 'http:';
+  return fetch(protocol + '//www.setgetgo.com/randomword/get.php', {
     cors: 'no-cors'
   }).then((res) => {
     return res.text();
@@ -17,8 +18,9 @@ const getRandomWord = function() {
 
 // == APP ==
 // Get the first random word before starting.
+let app = null;
 getRandomWord().then((random_word) => {
-  const app = new Vue({
+  app = new Vue({
     el: '#app',
     data: {
       word: random_word || [],
