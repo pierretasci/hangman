@@ -7,12 +7,28 @@ const QWERTY_KEYS = [
 ];
 const getRandomWord = function() {
   const protocol = window.location.protocol === 'https:' ? 'https:' : 'http:';
-  return fetch(protocol + '//www.setgetgo.com/randomword/get.php', {
+  return fetch(protocol + '//www.setgetgo.com/randomword/get.phps', {
     cors: 'no-cors'
   }).then((res) => {
     return res.text();
   }).then((word) => {
     return word.toUpperCase().split('');
+  }).catch((err) => {
+    console.error('Could not fetch from remote. Fetching local.');
+    return fetch('words.json');
+  }).then((res) => {
+    // If we got a response, that means it loaded correctly.
+    return res.json();
+  }).then((raw) => {
+    console.log(raw);
+    const STATIC_WORDS = raw.words;
+    if (Array.isArray(STATIC_WORDS) && STATIC_WORDS.length > 0) {
+      return STATIC_WORDS[Math.round(Math.random() * STATIC_WORDS.length) - 1]
+        .toUpperCase()
+        .split('');
+    } else {
+      throw new Error("Could not load static words.");
+    }
   });
 }
 
