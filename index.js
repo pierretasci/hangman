@@ -7,13 +7,20 @@ const QWERTY_KEYS = [
 ];
 const getRandomWord = function() {
   const protocol = window.location.protocol === 'https:' ? 'https:' : 'http:';
-  return fetch(protocol + '//www.setgetgo.com/randomword/get.php', {
-    cors: 'no-cors'
+  return new Promise((resolve, reject) => {
+    if (protocol === 'http:') {
+      return resolve(fetch(protocol + '//www.setgetgo.com/randomword/get.php', {
+        cors: 'no-cors'
+      }));
+    } else {
+      reject(new Error('Cannot fetch words api over https. Violates security policy'));
+    }
   }).then((res) => {
     return res.text();
   }).then((word) => {
     return word.toUpperCase().split('');
   }).catch((err) => {
+    console.error(err);
     console.error('Could not fetch from remote. Fetching local.');
     return fetch('words.json');
   }).then((res) => {
