@@ -54,6 +54,13 @@ getRandomWord().then((random_word) => {
         this.wins++;
         return true;
       },
+      gameIsLost: function() {
+        if (this.guesses_left === 0 && !this.allLettersFound) {
+          this.losses++;
+          return true;
+        }
+        return false;
+      },
       hangmanClass: function() {
         const classes = {};
         for (let i = 0; i < MAX_GUESSES; ++i) {
